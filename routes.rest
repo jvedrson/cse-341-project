@@ -1,0 +1,76 @@
+### Get all movies
+GET http://localhost:8080/movies
+
+### Get movie by id
+GET http://localhost:8080/movies/69c873dbd09508245250e6ca
+
+### Create a movie
+POST http://localhost:8080/movies
+Content-Type: application/json
+
+{
+    "title": "Jurassic Park",
+    "director": "Steven Spielberg",
+    "releaseYear": 1993,
+    "genre": "Adventure",
+    "rating": "PG-13",
+    "durationMinutes": 127,
+    "description": "A thrilling adventure with dinosaurs brought back to life.",
+    "cast": ["Sam Neill", "Laura Dern", "Jeff Goldblum"]
+}
+
+### Update a movie
+PUT http://localhost:8080/movies/69c873dbd09508245250e6ca
+Content-Type: application/json
+
+{
+    "title": "Jurassic Park (Updated)",
+    "director": "Steven Spielberg (Updated)",
+    "releaseYear": 1993,
+    "genre": "Adventure",
+    "rating": "PG-13",
+    "durationMinutes": 127,
+    "description": "A thrilling adventure with dinosaurs brought back to life (Updated).",
+    "cast": ["Sam Neill", "Laura Dern", "Jeff Goldblum"]
+}
+
+### Delete a movie
+DELETE http://localhost:8080/movies/69c873dbd09508245250e6ca 
+
+
+### ----------------------------------------------------
+### ----------------------------------------------------
+
+
+### Get all reviews
+GET http://localhost:8080/reviews
+
+### Get review by id
+GET http://localhost:8080/reviews/69c87464d09508245250e6cb
+
+### Create a review
+POST http://localhost:8080/reviews
+Content-Type: application/json
+
+{
+    "movieId": "69c873dbd09508245250e6ca",
+    "reviewerName": "Eder",
+    "score": 7,
+    "comment": "normal! I recommended!",
+    "reviewDate": "2026-03-01"
+}
+
+### Update a review
+PUT http://localhost:8080/reviews/69c87464d09508245250e6cb
+Content-Type: application/json
+
+{
+    "movieId": "69c873dbd09508245250e6ca",
+    "reviewerName": "Eder",
+    "score": 10,
+    "comment": "Changed my mind, this movie is a 10/10",
+    "reviewDate": "2026-03-01"
+}
+
+### Delete a review
+DELETE http://localhost:8080/reviews/69c87464d09508245250e6cb
