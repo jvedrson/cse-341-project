@@ -56,10 +56,30 @@ const createReview = async (req, res) => {
       comment: req.body.comment,
       reviewDate: req.body.reviewDate,
     };
+
+    if (!ObjectId.isValid(review.movieId)) {
+      return res.status(400).json({
+        message: "Invalid movie ID.",
+      });
+    }
+
+    const movieId = new ObjectId(review.movieId);
+    const movie = await mongodb
+      .getDatabase()
+      .collection("movies")
+      .findOne({ _id: movieId });
+
+    if (!movie) {
+      return res.status(404).json({
+        message: "Movie not found for the provided movie ID.",
+      });
+    }
+
     const response = await mongodb
       .getDatabase()
       .collection("reviews")
       .insertOne(review);
+
     if (response.acknowledged) {
       res.status(201).json({
         message: "Review created successfully.",
