@@ -1,6 +1,8 @@
 const express = require("express");
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger-output.json");
+require("./auth/passport"); // Ensure passport strategies are configured
+const cors = require("cors");
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -20,6 +22,18 @@ app.use((req, res, next) => {
   );
   next();
 });
+app.use(
+  cors({ origin: "*", methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"] }),
+);
+app.use(
+  require("express-session")({
+    secret: process.env.SESSION_SECRET || "default_secret",
+    resave: false,
+    saveUninitialized: true,
+  }),
+);
+app.use(require("passport").initialize());
+app.use(require("passport").session());
 
 app.use("/", require("./routes"));
 
