@@ -5,10 +5,10 @@
     "description": "API for movies and reviews",
     "version": "1.0.0"
   },
-  "host": "localhost:8080",
+  "host": "cse-341-project-vf8c.onrender.com",
   "basePath": "/",
   "schemes": [
-    "http"
+    "https"
   ],
   "paths": {
     "/movies/": {

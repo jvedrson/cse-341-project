@@ -5,8 +5,8 @@ const doc = {
     title: "CSE 341 Project API",
     description: "API for movies and reviews",
   },
-  host: "localhost:8080", // TODO: Change to the deployed URL
-  schemes: ["http"],
+  host: "cse-341-project-vf8c.onrender.com",
+  schemes: ["https"],
 };
 
 const outputFile = "./swagger-output.json";
