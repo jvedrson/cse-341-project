@@ -13,7 +13,8 @@ async function initDatabase(callback) {
     return callback(null, db);
   }
 
-  mongoClient.connect(MONGO_URL)
+  mongoClient
+    .connect(MONGO_URL)
     .then((client) => {
       db = client.db();
       console.log("Connected to MongoDB");
