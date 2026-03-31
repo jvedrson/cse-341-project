@@ -1,49 +1,48 @@
 const mongodb = require("../db/database");
 const ObjectId = require("mongodb").ObjectId;
 
-const getAll = (req, res) => {
+const getAll = async (req, res) => {
   // #swagger.tags = ["Reviews"]
-  mongodb
-    .getDatabase()
-    .collection("reviews")
-    .find()
-    .toArray()
-    .then((lists) => {
-      res.setHeader("Content-Type", "application/json");
-      res.status(200).json(lists);
-    })
-    .catch((err) => {
-      res.status(500).json({
-        message: err.message || "Error retrieving reviews.",
-      });
-    });
-};
-
-const getSingle = (req, res) => {
-  // #swagger.tags = ["Reviews"]
-  if (!ObjectId.isValid(req.params.id)) {
-    return res.status(400).json({
-      message: "Invalid review ID.",
+  try {
+    const lists = await mongodb
+      .getDatabase()
+      .collection("reviews")
+      .find()
+      .toArray();
+    res.setHeader("Content-Type", "application/json");
+    res.status(200).json(lists);
+  } catch (err) {
+    res.status(500).json({
+      message: err.message || "Error retrieving reviews.",
     });
   }
-  const reviewId = new ObjectId(req.params.id);
-  mongodb
-    .getDatabase()
-    .collection("reviews")
-    .findOne({ _id: reviewId })
-    .then((review) => {
-      res.setHeader("Content-Type", "application/json");
-      if (review) {
-        res.status(200).json(review);
-      } else {
-        res.status(404).json({ message: "Review not found." });
-      }
-    })
-    .catch((err) => {
-      res.status(500).json({
-        message: err.message || "Error retrieving the review.",
+};
+
+const getSingle = async (req, res) => {
+  // #swagger.tags = ["Reviews"]
+  try {
+    if (!ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({
+        message: "Invalid review ID.",
       });
+    }
+    const reviewId = new ObjectId(req.params.id);
+    const review = await mongodb
+      .getDatabase()
+      .collection("reviews")
+      .findOne({ _id: reviewId });
+
+    res.setHeader("Content-Type", "application/json");
+    if (review) {
+      res.status(200).json(review);
+    } else {
+      res.status(404).json({ message: "Review not found." });
+    }
+  } catch (err) {
+    res.status(500).json({
+      message: err.message || "Error retrieving the review.",
     });
+  }
 };
 
 const createReview = async (req, res) => {

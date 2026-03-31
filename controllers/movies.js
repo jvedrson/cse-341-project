@@ -1,50 +1,49 @@
 const mongodb = require("../db/database");
 const ObjectId = require("mongodb").ObjectId;
 
-const getAll = (req, res) => {
+const getAll = async (req, res) => {
   // #swagger.tags = ["Movies"]
-  mongodb
-    .getDatabase()
-    .collection("movies")
-    .find()
-    .toArray()
-    .then((lists) => {
-      res.setHeader("Content-Type", "application/json");
-      res.status(200).json(lists);
-    })
-    .catch((err) => {
-      res.status(500).json({
-        message: err.message || "Error retrieving movies.",
-      });
-    });
-};
-
-const getSingle = (req, res) => {
-  // #swagger.tags = ["Movies"]
-  if (!ObjectId.isValid(req.params.id)) {
-    return res.status(400).json({
-      message: "Invalid movie ID.",
+  try {
+    const lists = await mongodb
+      .getDatabase()
+      .collection("movies")
+      .find()
+      .toArray();
+    res.setHeader("Content-Type", "application/json");
+    res.status(200).json(lists);
+  } catch (err) {
+    res.status(500).json({
+      message: err.message || "Error retrieving movies.",
     });
   }
-  const movieId = new ObjectId(req.params.id);
+};
 
-  mongodb
-    .getDatabase()
-    .collection("movies")
-    .findOne({ _id: movieId })
-    .then((movie) => {
-      res.setHeader("Content-Type", "application/json");
-      if (movie) {
-        res.status(200).json(movie);
-      } else {
-        res.status(404).json({ message: "Movie not found." });
-      }
-    })
-    .catch((err) => {
-      res.status(500).json({
-        message: err.message || "Error retrieving the movie.",
+const getSingle = async (req, res) => {
+  // #swagger.tags = ["Movies"]
+  try {
+    if (!ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({
+        message: "Invalid movie ID.",
       });
+    }
+    const movieId = new ObjectId(req.params.id);
+
+    const movie = await mongodb
+      .getDatabase()
+      .collection("movies")
+      .findOne({ _id: movieId });
+    
+    res.setHeader("Content-Type", "application/json");
+    if (movie) {
+      res.status(200).json(movie);
+    } else {
+      res.status(404).json({ message: "Movie not found." });
+    }
+  } catch (err) {
+    res.status(500).json({
+      message: err.message || "Error retrieving the movie.",
     });
+  }
 };
 
 const createMovie = async (req, res) => {
